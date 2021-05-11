@@ -1,0 +1,89 @@
+endpoint = 'your endpoint' #Replace with your endpoint
+key = 'generated key' #Replace with your key
+
+
+import urllib.request
+import json
+import os
+import numpy as np
+import pandas as pd
+
+# Prepare the input data
+data = {
+    "Inputs":
+    {
+        "WebServiceInput0":
+        [
+            {
+                    'Order ID': "B-26100",
+                    'Amount': 828,
+                    'Quantity': 2,
+                    'Category': "Furniture",
+                    'Sub-Category': "Chairs",
+            },
+            {
+                    'Order ID': "B-25602",
+                    'Amount': 34,
+                    'Quantity': 5,
+                    'Category': "Electronics",
+                    'Sub-Category': "Phones",
+            },
+            {
+                    'Order ID': "B-25601",
+                    'Amount': 5335,
+                    'Quantity': 1,
+                    'Category': "Clothing",
+                    'Sub-Category': "Hankerchief",
+             },
+             {
+                    'Order ID': "B-25603",
+                    'Amount': 116,
+                    'Quantity': 4,
+                    'Category': "Clothing",
+                    'Sub-Category': "Stole",
+              },
+              {
+                    'Order ID': "B-25609",
+                    'Amount': 485,
+                    'Quantity': 4,
+                    'Category': "Electronics",
+                    'Sub-Category': "Electronic Games",
+              },
+              {
+                    'Order ID': "B-25608",
+                    'Amount': 1364,
+                    'Quantity': 5,
+                    'Category': "Furniture",
+                    'Sub-Category': "Tables",
+              },
+        
+        
+        
+        ],
+        
+        
+        
+    },
+    "GlobalParameters":  {
+    }
+}
+body = str.encode(json.dumps(data))
+headers = {'Content-Type':'application/json', 'Authorization':('Bearer '+ key)}
+req = urllib.request.Request(endpoint, body, headers)
+
+try:
+    response = urllib.request.urlopen(req)
+    result = response.read()
+    json_result = json.loads(result)
+    #y = json_result["Results"]["WebServiceOutput0"][3]["Predicted_Profit"]
+    #print('Predicted Profit: {:.2f}'.format(y))
+    
+    for i in json_result["Results"]["WebServiceOutput0"]:
+            print(i)
+
+except urllib.error.HTTPError as error:
+    print("The request failed with status code: " + str(error.code))
+
+    # Print the headers to help debug the error
+    print(error.info())
+    print(json.loads(error.read().decode("utf8", 'ignore')))
